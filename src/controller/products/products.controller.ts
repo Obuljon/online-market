@@ -27,7 +27,7 @@ export class ProductsController {
     return this.productsService.create(body);
   }
 
-  @Put('update')
+  @Put('update/:id')
   updateProduct(@Body() body: UpdateProductDTO, @Param() param) {
     const { id } = param;
     const product = this.productsService.getById({ id });
