@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDTO, UpdateProductDTO } from '../dtos/productDTO';
@@ -51,9 +52,19 @@ export class ProductsController {
     return this.productsService.deleteById({ _id: id });
   }
 
+  @Get('search/:searchTerm/:page/:limit')
+  async search(@Param() param) {
+    const { searchTerm, page, limit } = param;
+    return this.productsService.search({ searchTerm, page, limit });
+  }
+
   @Get('getall/:page/:limit')
   getAllProducts(@Param() param) {
-    return param;
+    const { page, limit } = param;
+    return this.productsService.getAll({
+      page: Number(page),
+      limit: Number(limit),
+    });
   }
 
   @Get('getone/:name')
@@ -74,5 +85,9 @@ export class ProductsController {
       throw new NotFoundException('Product not found');
     }
     return data;
+  }
+  @Get('test')
+  test() {
+    return 'test';
   }
 }
