@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 # online-market
-=======
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
@@ -99,5 +98,136 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-# online-market
->>>>>>> 6b8de65 (Initial commit)
+
+## Buyurtma va Savatcha API Endpointlari
+
+Quyidagi endpointlar buyurtmalar va foydalanuvchi savatchasi bilan ishlash uchun mo‘ljallangan:
+
+### 1. Barcha mahsulotlarni olish (sahifalangan)
+- **GET** `/api/order/getall/:page/:limit`
+- Parametrlar:  
+  - `page` — Sahifa raqami  
+  - `limit` — Har bir sahifadagi mahsulotlar soni  
+- Tavsif: Barcha mahsulotlarni sahifalab (pagination) qaytaradi.
+
+### 2. Mahsulotni ID orqali olish
+- **GET** `/api/order/getbyid/:id`
+- Parametrlar:  
+  - `id` — Mahsulotning yagona identifikatori  
+- Tavsif: Berilgan ID bo‘yicha mahsulotni qaytaradi.
+
+### 3. Savatchadagi mahsulotlarni sahifalab olish
+- **GET** `/api/order/cart/:page/:limit`
+- Parametrlar:  
+  - `page` — Sahifa raqami  
+  - `limit` — Har bir sahifadagi mahsulotlar soni  
+- Tavsif: Foydalanuvchi savatchasidagi mahsulotlarni sahifalab qaytaradi.
+
+### 4. Savatchaga mahsulot qo‘shish yoki yangilash
+- **POST** `/api/order/addcart`
+- Body (JSON):  
+  - `_id` — Mahsulot IDsi  
+  - `number` — Mahsulot soni  
+- Tavsif: Savatchaga mahsulot qo‘shadi yoki mavjud mahsulot sonini yangilaydi. Agar `number` 0 bo‘lsa, mahsulot savatchadan o‘chiriladi.
+
+### 5. Savatchadagi barcha mahsulotlarni o‘chirish
+- **DELETE** `/api/order/deletecart`
+- Tavsif: Foydalanuvchi savatchasidagi barcha mahsulotlarni o‘chiradi.
+
+### 6. Savatchadan bitta mahsulotni o‘chirish
+- **DELETE** `/api/order/deletecart/:id`
+- Parametrlar:  
+  - `id` — Mahsulot IDsi  
+- Tavsif: Savatchadan berilgan IDga ega mahsulotni o‘chiradi.
+
+## Admin API Endpointlari
+
+Quyidagi endpointlar admin foydalanuvchilarni boshqarish uchun ishlatiladi:
+
+### 1. Admin qo‘shish
+- **POST** `/api/admin/add`
+- Body (JSON):  
+  - `name` — Admin ismi  
+  - `email` — Admin emaili  
+  - `password` — Parol  
+- Himoya: Faqat autentifikatsiyadan o‘tgan adminlar uchun (`AuthGuard`)
+- Tavsif: Yangi admin foydalanuvchi yaratadi. Agar email allaqachon mavjud bo‘lsa, xatolik qaytaradi.
+
+### 2. Admin login qilish
+- **POST** `/api/admin/login`
+- Body (JSON):  
+  - `email` — Admin emaili  
+  - `password` — Parol  
+- Tavsif: Admin login qiladi. Agar admin topilmasa va bu birinchi admin bo‘lsa, default admin yaratiladi. To‘g‘ri ma’lumotlar bo‘lsa JWT token qaytariladi.
+
+### 3. Admin o‘z ma’lumotlarini olish
+- **GET** `/api/admin/mydata`
+- Himoya: Faqat autentifikatsiyadan o‘tgan adminlar uchun (`AuthGuard`)
+- Tavsif: Tizimga kirgan admin o‘z ma’lumotlarini ko‘radi.
+
+### 4. Admin ma’lumotlarini yangilash
+- **PUT** `/api/admin/update`
+- Body (JSON):  
+  - Yangilanishi kerak bo‘lgan admin ma’lumotlari  
+- Himoya: Faqat autentifikatsiyadan o‘tgan adminlar uchun (`AuthGuard`)
+- Tavsif: Tizimga kirgan admin o‘z ma’lumotlarini yangilaydi. Agar yangi email boshqa admin tomonidan ishlatilayotgan bo‘lsa, xatolik qaytaradi.
+
+### 5. Adminni o‘chirish
+- **DELETE** `/api/admin/delete`
+- Himoya: Faqat autentifikatsiyadan o‘tgan adminlar uchun (`AuthGuard`)
+- Tavsif: Tizimga kirgan admin o‘z akkauntini o‘chiradi.
+
+## Mahsulotlar (Products) API Endpointlari
+
+Quyidagi endpointlar mahsulotlarni boshqarish uchun ishlatiladi:
+
+### 1. Mahsulot yaratish
+- **POST** `/api/products/create`
+- Body (JSON):  
+  - Mahsulot nomi va boshqa kerakli ma’lumotlar
+- Tavsif: Yangi mahsulot yaratadi. Agar mahsulot nomi allaqachon mavjud bo‘lsa, xatolik qaytaradi.
+
+### 2. Mahsulotni yangilash
+- **PUT** `/api/products/update/:id`
+- Parametrlar:  
+  - `id` — Mahsulot IDsi
+- Body (JSON):  
+  - Yangilanishi kerak bo‘lgan mahsulot ma’lumotlari
+- Tavsif: Berilgan ID bo‘yicha mahsulotni yangilaydi. Agar mahsulot topilmasa yoki nomi boshqa mahsulotda mavjud bo‘lsa, xatolik qaytaradi.
+
+### 3. Mahsulotni o‘chirish
+- **DELETE** `/api/products/delete/:id`
+- Parametrlar:  
+  - `id` — Mahsulot IDsi
+- Tavsif: Berilgan ID bo‘yicha mahsulotni o‘chiradi.
+
+### 4. Mahsulotlarni qidirish (search)
+- **GET** `/api/products/search/:searchTerm/:page/:limit`
+- Parametrlar:  
+  - `searchTerm` — Qidirilayotgan so‘z
+  - `page` — Sahifa raqami
+  - `limit` — Har bir sahifadagi mahsulotlar soni
+- Tavsif: Qidiruv so‘ziga mos mahsulotlarni sahifalab qaytaradi.
+
+### 5. Barcha mahsulotlarni olish (sahifalangan)
+- **GET** `/api/products/getall/:page/:limit`
+- Parametrlar:  
+  - `page` — Sahifa raqami
+  - `limit` — Har bir sahifadagi mahsulotlar soni
+- Tavsif: Barcha mahsulotlarni sahifalab (pagination) qaytaradi.
+
+### 6. Mahsulotni nomi bo‘yicha olish
+- **GET** `/api/products/getone/:name`
+- Parametrlar:  
+  - `name` — Mahsulot nomi
+- Tavsif: Berilgan nom bo‘yicha mahsulotni qaytaradi. Agar topilmasa, xatolik qaytaradi.
+
+### 7. Mahsulotni ID bo‘yicha olish
+- **GET** `/api/products/getbyid/:id`
+- Parametrlar:  
+  - `id` — Mahsulot IDsi
+- Tavsif: Berilgan ID bo‘yicha mahsulotni qaytaradi. Agar topilmasa, xatolik qaytaradi.
+
+### 8. Test endpoint
+- **GET** `/api/products/test`
+- Tavsif: Test uchun ishlatiladi, oddiy matn qaytaradi.

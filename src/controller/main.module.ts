@@ -8,6 +8,8 @@ import { AdminService } from './admin/admin.service';
 import { Admin, AdminSchema } from '../schema/admin.schema';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthModule } from 'src/mid/auth/auth.module';
+import { OrderController } from './order/order.controller';
+import { OrderService } from './order/order.service';
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { AuthModule } from 'src/mid/auth/auth.module';
       { name: Admin.name, schema: AdminSchema },
     ]),
   ],
-  controllers: [ProductsController, AdminController],
-  providers: [ProductsService, AdminService],
+  controllers: [ProductsController, AdminController, OrderController],
+  providers: [ProductsService, AdminService, OrderService],
 })
 export class MainModule {}
