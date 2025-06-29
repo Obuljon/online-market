@@ -15,7 +15,6 @@ import {
 import { AdminService } from './admin.service';
 import { AdminDTO, EditAdminDTO } from '../dtos/adminDTO';
 import { compare } from 'bcrypt';
-import { console } from 'inspector';
 import { AuthGuard } from 'src/mid/auth/auth.guard';
 
 @Controller('api/admin')
