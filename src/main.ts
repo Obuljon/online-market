@@ -26,7 +26,7 @@ async function bootstrap() {
   );
 
   await app.listen(PORT, () => {
-    logger.log(`http://localhost:${PORT}`);
+    logger.log(`servr is running:http://localhost:${PORT}`);
   });
 }
 

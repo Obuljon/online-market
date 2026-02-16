@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from '../../schema/user.schema';
@@ -11,17 +11,15 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
-  async addUser({ name, email, password }): Promise<User> {
-    const hashedPassword = await hash(password, 10); // TODO: Hash the password before saving
-    const newUser = new this.userModel({
-      name,
-      email,
-      password: hashedPassword,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    });
+  async addUser(dto: SignupUserDTO): Promise<User> {
+    const existingUser = await this.userModel.findOne({ email: dto.email });
+    if (existingUser) {
+      throw new ConflictException("Foydalanuvchi allaqachon mavjud");
+    }
+    const hashedPassword = await hash(dto.password, 10); // TODO: Hash the password before saving
+    const newUser = new this.userModel({ ...dto, password: hashedPassword });
     return newUser.save();
   }
 
@@ -41,7 +39,7 @@ export class UsersService {
         _id: user._id.toString(),
       } as UserType;
     } catch (error) {
-      return null;
+      throw new ConflictException("Foydalanuvchi topilmadi");
     }
   }
 }

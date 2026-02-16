@@ -19,7 +19,7 @@ import { AuthGuard } from 'src/mid/auth/auth.guard';
 
 @Controller('api/admin')
 export class AdminController {
-  constructor(private readonly adminservice: AdminService) {}
+  constructor(private readonly adminservice: AdminService) { }
 
   @Post('add')
   @UseGuards(AuthGuard)
