@@ -231,3 +231,4 @@ Quyidagi endpointlar mahsulotlarni boshqarish uchun ishlatiladi:
 ### 8. Test endpoint
 - **GET** `/api/products/test`
 - Tavsif: Test uchun ishlatiladi, oddiy matn qaytaradi.
+# online-market
