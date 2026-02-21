@@ -8,12 +8,14 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { Logger } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
     // logger: any;
     constructor(private readonly usersService: UsersService,
-        private readonly jwtService: JwtService
+        private readonly jwtService: JwtService,
+        private readonly mailService: MailService
     ) { }
 
     async register(registerDto: RegisterDto): Promise<AuthResponse> {
@@ -25,9 +27,10 @@ export class AuthService {
                 throw new ConflictException("this email already registered");
             }
             const hashedPassword = await this.hashPassword(registerDto.password);
+
             const user = await this.usersService.createUser({
                 ...registerDto,
-                password: hashedPassword
+                password: hashedPassword,
             });
             const tokens = await this.generateToken(user);
             return {

@@ -8,10 +8,11 @@ import { AuthController } from './auth.controller';
 import { User } from 'src/users/entities/users.entity';
 import { UsersModule } from 'src/users/users.module';
 import { JwtStrategy } from './jwt.strategy';
+import { MailModule } from 'src/mail/mail.module';
 
 
 @Module({
-  imports: [UsersModule,
+  imports: [UsersModule, MailModule,
     TypeOrmModule.forFeature([User]), // 🔥 SHART — Repository<User>
     PassportModule,
     ConfigModule,
