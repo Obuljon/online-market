@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
                 entities: [__dirname + '/../**/*.entity{.ts,.js}'],
                 autoLoadEntities: true,
                 synchronize: config.get('NODE_ENV') !== 'production',
+                ssl: { rejectUnauthorized: false },
             }),
         }),
     ],
