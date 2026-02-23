@@ -12,7 +12,16 @@ export class MailService {
             subject: 'Sizning tasdiqlash kodingiz',
             text: `Sizning tasdiqlash kodingiz: ${code}`,
             html: `<strong>Sizning tasdiqlash kodingiz: ${code}</strong>`,
-            
+
+        });
+    }
+
+    // mail.service.ts
+    async sendResetPasswordEmail(email: string, code: string): Promise<void> {
+        await this.mailerService.sendMail({
+            to: email,
+            subject: 'Reset Password',
+            text: `Your reset password code: ${code}`,
         });
     }
 }

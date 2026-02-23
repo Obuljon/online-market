@@ -20,9 +20,11 @@ export class UsersService {
         const user = this.userRepo.create(createUserDto);
 
         const code = Math.floor(100000 + Math.random() * 900000).toString();
+        user.verificationCode = code;
         await this.mailService.sendVerificationEmail(user.email, code);
         return this.userRepo.save(user);
     }
+
     async findByEmail(email: string): Promise<User | null> {
         return this.userRepo.findOne({ where: { email } });
     }
@@ -45,6 +47,13 @@ export class UsersService {
         Object.assign(findUser, updateData);
         await this.userRepo.save(findUser);
         return { message: 'success update ' }
+    }
+    async isVerified(id: string): Promise<{ isVerified: boolean }> {
+        const findUser = await this.userRepo.findOne({ where: { id } })
+        if (!findUser) {
+            throw new NotFoundException("user not found");
+        }
+        return { isVerified: findUser.isEmailVerified }
     }
 
     async deleteUser(id: string): Promise<{ message: string }> {

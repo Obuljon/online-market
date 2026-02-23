@@ -1,9 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from './entities/users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { IsVerifiedGuard } from 'src/common/guards/verified.guard';
+import { RolesGuard } from 'src/common/guards/roles.guard';
 
 @ApiTags('Users')
 @ApiBearerAuth('access-token')
@@ -12,15 +15,23 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
   @Post('/create')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async createUser(@Body() createUserDto: CreateUserDto) {
+  createUser(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
 
   @Get('/allUser/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  async getUserProfile(@Body('id') id: string) {
-    return this.usersService.findByEmail(id);
+  getUserProfile(@Param('id') id: string) {
+    return this.usersService.getOneUser(id);
   }
-  // @Get('/')
+
+  @Get('/profile')
+  @UseGuards(JwtAuthGuard, IsVerifiedGuard)
+  getProfile(@Req() req: Request) {
+    const user = req['user'];
+    return user;
+  }
 }

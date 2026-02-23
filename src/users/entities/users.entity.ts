@@ -32,8 +32,15 @@ export class User {
     @Column({ default: true })
     isActive: boolean;
 
+    @Column({ nullable: true })
+    verificationCode?: string;
+
     @Column({ default: false })
     isEmailVerified: boolean;
+
+    // users.entity.ts
+    @Column({ nullable: true })
+    resetPasswordCode: string;
 
     @CreateDateColumn()
     createdAt: Date;
